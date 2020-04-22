@@ -48,10 +48,10 @@ jobs:
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
-          key: ${{ secrets.DO_SSHKEY }}
+          key: ${{ secrets.DO_SSHPRIVATEKEY }}
           port: ${{ secrets.DO_PORT }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
             docker stop $(docker ps -a -q)
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker run -dit -p 80:80 docker.pkg.github.com/${{ github.actor }}/${{ github.repository }}/$IMAGE_NAME:latest
+            docker run -dit -p 80:80 docker.pkg.github.com/${{ github.repository }}/deploybot:latest
