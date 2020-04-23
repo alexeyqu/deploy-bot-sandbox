@@ -22,12 +22,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        
+      - name: Generate build_ts variable
+        run: |
+          export build_ts="$(date)"
+          echo "::set-env name=build_ts::$build_ts"
 
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          build_ts: $( date )
+          build_ts: ${{ env.build_ts }}
         with:
           name: ${{ github.repository }}/${{ env.IMAGE_NAME }}
           registry: docker.pkg.github.com
@@ -35,7 +40,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
           tags: latest
-          buildargs: build_ts 
+          buildargs: ${{ env.build_ts }}
 
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
