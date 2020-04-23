@@ -28,7 +28,7 @@ jobs:
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
         with:
-          name: ${{ github.repository }}/$IMAGE_NAME
+          name: ${{ github.repository }}/${{ env.IMAGE_NAME }}
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -40,15 +40,16 @@ jobs:
         env:
           GITHUB_USERNAME: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           passphrase: ${{ secrets.DO_PASSPHRASE }}
           key: ${{ secrets.DO_SSHPRIVATEKEY }}
           port: ${{ secrets.DO_PORT }}
-          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          envs: GITHUB_USERNAME, GITHUB_TOKEN, IMAGE_NAME
           script: |
             docker stop $(docker ps -a -q)
             docker rm $(docker ps -a -q)
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/deploybot:latest
+            docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:latest
