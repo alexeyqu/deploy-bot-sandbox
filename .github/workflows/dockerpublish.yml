@@ -22,16 +22,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        
-      - name: Generate build_ts variable
-        id: date
-        run: echo "::set-output name=build_ts::$(date +'%Y-%m-%d %H:%M')"
+
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
 
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          build_ts: ${{ steps.date.outputs.build_ts }}
         with:
           name: ${{ github.repository }}/${{ env.IMAGE_NAME }}
           registry: docker.pkg.github.com
@@ -39,7 +38,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
           tags: latest
-          buildargs: build_ts
+          buildargs: "${{ steps.current-time.outputs.time }}"
 
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
