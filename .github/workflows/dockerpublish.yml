@@ -27,7 +27,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          build_ts: "$date"
+          build_ts: $(echo "$date")
         with:
           name: ${{ github.repository }}/${{ env.IMAGE_NAME }}
           registry: docker.pkg.github.com
