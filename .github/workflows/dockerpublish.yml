@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
           tags: latest
-          buildargs: ${{ env.build_ts }}
+          buildargs: build_ts
 
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
