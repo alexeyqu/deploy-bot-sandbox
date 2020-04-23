@@ -10,11 +10,7 @@ on:
     tags:
       - v*
 
-  # Run tests for any PRs.
-  pull_request:
-
 env:
-  # TODO: Change variable to your image's name.
   IMAGE_NAME: deploybot
 
 jobs:
@@ -29,8 +25,10 @@ jobs:
 
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          IMAGE_NAME: ${{ IMAGE_NAME }}
         with:
-          name: ${{ github.repository }}/deploybot
+          name: ${{ github.repository }}/$IMAGE_NAME
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +38,7 @@ jobs:
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
         env:
-          GITHUB_USERNAME: ${{ secrets.actor }}
+          GITHUB_USERNAME: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.DO_HOST }}
@@ -51,5 +49,6 @@ jobs:
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: |
             docker stop $(docker ps -a -q)
-            docker login docker.pkg.github.com -u alexeyqu -p $GITHUB_TOKEN
+            docker rm $(docker ps -a -q)
+            docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/deploybot:latest
