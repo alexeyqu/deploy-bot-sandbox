@@ -55,4 +55,4 @@ jobs:
           script: |
             docker stop $(docker ps -a -q)
             docker login docker.pkg.github.com -u alexeyqu -p $GITHUB_TOKEN
-            docker run -dit docker.pkg.github.com/${{ github.repository }}/deploybot:latest
+            docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/deploybot:latest
