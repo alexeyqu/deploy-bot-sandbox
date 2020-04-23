@@ -23,9 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Get timestamp
-        uses: gerred/actions/current-time@master
+      - name: Generate build_ts variable
         id: current-time
+        run: echo "::set-output name=time::$(date +'%Y-%m-%d %H:%M')"
 
       - name: Publish to Github Packages Registry
         uses: elgohr/Publish-Docker-Github-Action@master
