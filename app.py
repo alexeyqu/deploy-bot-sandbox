@@ -47,7 +47,7 @@ class DockeredBot:
 if __name__ == '__main__':
     with open('telegram.token') as token_file:
         token = token_file.read().strip()
-    logging.info(f'Token: "{token}"')
+    logging.error(f'Token: "{token}"')
     with open('timestamp') as ts_file:
         ts = ts_file.read().strip()
     app = DockeredBot(token, ts)
