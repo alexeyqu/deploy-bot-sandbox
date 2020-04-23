@@ -27,6 +27,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          BUILD_TS: "$date"
         with:
           name: ${{ github.repository }}/${{ env.IMAGE_NAME }}
           registry: docker.pkg.github.com
@@ -34,6 +35,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
           tags: latest
+          buildargs: BUILD_TS 
 
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
@@ -52,4 +54,4 @@ jobs:
             docker stop $(docker ps -a -q)
             docker rm $(docker ps -a -q)
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:latest
+            docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
