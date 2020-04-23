@@ -31,6 +31,7 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          build_ts: "${{ steps.current-time.outputs.time }}"
         with:
           name: ${{ github.repository }}/${{ env.IMAGE_NAME }}
           registry: docker.pkg.github.com
@@ -38,7 +39,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
           tags: latest
-          buildargs: "${{ steps.current-time.outputs.time }}"
+          buildargs: build_ts
 
       - name: Deploy package to digitalocean
         uses: appleboy/ssh-action@master
