@@ -8,7 +8,6 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 COPY . /app
-RUN echo ${build_ts}
 RUN echo ${build_ts} > /app/timestamp
 WORKDIR /app
 
