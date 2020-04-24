@@ -16,12 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 class DockeredBot:
-    def __init__(self, token, ts):
+    def __init__(self, token, build_ts, deploy_ts):
         self.updater = Updater(token, use_context=True)
-        self.ts = ts
+        self.build_ts = build_ts
+        self.deploy_ts = deploy_ts
 
     def start(self, update, context):
-        update.message.reply_text(f'Hi! I\'ve been deployed at {ts}')
+        update.message.reply_text(f'Hi! I was built at {self.build_ts} and deployed at {self.deploy_ts}')
 
     def help(self, update, context):
         """Send a message when the command /help is issued"""
@@ -47,7 +48,9 @@ class DockeredBot:
 if __name__ == '__main__':
     with open('telegram.token') as token_file:
         token = token_file.read().strip()
-    with open('timestamp') as ts_file:
-        ts = ts_file.read().strip()
-    app = DockeredBot(token, ts)
+    with open('build_timestamp') as ts_file:
+        build_ts = ts_file.read().strip()
+    with open('deploy_timestamp') as ts_file:
+        deploy_ts = ts_file.read().strip()
+    app = DockeredBot(token, build_ts, deploy_ts)
     app.main()

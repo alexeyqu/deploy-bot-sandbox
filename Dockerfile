@@ -8,7 +8,9 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 COPY . /app
-RUN echo ${build_ts} > /app/timestamp
+
+RUN echo ${build_ts} > /app/build_timestamp
+
 WORKDIR /app
 
 RUN apk del gcc libressl-dev musl-dev libffi-dev

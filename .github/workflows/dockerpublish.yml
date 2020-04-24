@@ -59,4 +59,7 @@ jobs:
             docker rm $(docker ps -a -q)
             docker rmi $(docker images -q)
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker run -v /root/telegram.token:/app/telegram.token -dit docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
+            echo $(date) > /${{ secrets.DO_USERNAME }}/deploy_timestamp
+            docker run -v /${{ secrets.DO_USERNAME }}/telegram.token:/app/telegram.token \
+              -v /${{ secrets.DO_USERNAME }}/deploy_timestamp:/app/deploy_timestamp \
+              -dit docker.pkg.github.com/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest
