@@ -28,7 +28,7 @@ jobs:
         run: echo "::set-output name=time::$(date +'%Y-%m-%d %H:%M')"
 
       - name: Publish to Github Packages Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@v5
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           build_ts: "${{ steps.current-time.outputs.time }}"
